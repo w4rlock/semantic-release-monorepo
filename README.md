@@ -63,7 +63,15 @@ The monorepo management tool [`lerna`](https://github.com/lerna/lerna) can be us
 lerna exec --concurrency 1 -- npx --no-install semantic-release -e semantic-release-monorepo
 ```
 
+### With pnpm
+[pnpm](https://pnpm.io/) has built-in [workspace](https://pnpm.io/workspaces) functionality for monorepos. Similarly to the above, you can use pnpm to make release in all packages:
+
+```bash
+pnpm -r --workspace-concurrency=1 exec -- npx --no-install semantic-release -e semantic-release-monorepo
+```
+
  Thanks to how [`npx's package resolution works`](https://github.com/npm/npx#description), if the repository root is in `$PATH` (typically true on CI), `semantic-release` and `semantic-release-monorepo` can be installed once in the repo root instead of in each individual package, likely saving both time and disk space.
+
 
 ## Advanced
 This library modifies the `context` object passed to `semantic-release` plugins in the following way to make them compatible with a monorepo.
