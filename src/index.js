@@ -5,7 +5,7 @@ import { logPluginVersion } from './log-plugin-version.js';
 import { withOnlyPackageCommits } from './only-package-commits.js';
 import versionToGitTag from './version-to-git-tag.js';
 
-import { mapNextReleaseVersion, withOptionsTransforms } from './options-transforms';
+import { mapNextReleaseVersion, withOptionsTransforms } from './options-transforms.js';
 
 export const analyzeCommits = wrapStep(
   'analyzeCommits',
