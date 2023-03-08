@@ -1,24 +1,21 @@
 import { wrapStep } from '@w4rlock/semantic-release-plugin-decorators';
 import { compose } from 'ramda';
 import readPkg from 'read-pkg';
-import { logPluginVersion } from './log-plugin-version';
-import withOnlyPackageCommits from './only-package-commits';
+import { logPluginVersion } from './log-plugin-version.js';
+import { withOnlyPackageCommits } from './only-package-commits.js';
 import versionToGitTag from './version-to-git-tag';
 
-import {
-  mapNextReleaseVersion,
-  withOptionsTransforms,
-} from './options-transforms';
+import { mapNextReleaseVersion, withOptionsTransforms } from './options-transforms';
 
-const analyzeCommits = wrapStep(
+export const analyzeCommits = wrapStep(
   'analyzeCommits',
   compose(logPluginVersion('analyzeCommits'), withOnlyPackageCommits),
   {
-    wrapperName: 'semantic-release-monorepo',
+    wrapperName: 'semantic-release-monorepo'
   }
 );
 
-const generateNotes = wrapStep(
+export const generateNotes = wrapStep(
   'generateNotes',
   compose(
     logPluginVersion('generateNotes'),
@@ -26,11 +23,11 @@ const generateNotes = wrapStep(
     withOptionsTransforms([mapNextReleaseVersion(versionToGitTag)])
   ),
   {
-    wrapperName: 'semantic-release-monorepo',
+    wrapperName: 'semantic-release-monorepo'
   }
 );
 
-const success = wrapStep(
+export const success = wrapStep(
   'success',
   compose(
     logPluginVersion('success'),
@@ -38,11 +35,11 @@ const success = wrapStep(
     withOptionsTransforms([mapNextReleaseVersion(versionToGitTag)])
   ),
   {
-    wrapperName: 'semantic-release-monorepo',
+    wrapperName: 'semantic-release-monorepo'
   }
 );
 
-const fail = wrapStep(
+export const fail = wrapStep(
   'fail',
   compose(
     logPluginVersion('fail'),
@@ -50,14 +47,8 @@ const fail = wrapStep(
     withOptionsTransforms([mapNextReleaseVersion(versionToGitTag)])
   ),
   {
-    wrapperName: 'semantic-release-monorepo',
+    wrapperName: 'semantic-release-monorepo'
   }
 );
 
-module.exports = {
-  analyzeCommits,
-  generateNotes,
-  success,
-  fail,
-  tagFormat: `${readPkg.sync().name}-v\${version}`,
-};
+export const tagFormat = `${readPkg.sync().name}-v\${version}`;

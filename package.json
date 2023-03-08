@@ -1,7 +1,8 @@
 {
   "name": "@w4rlock/semantic-release-monorepo",
-  "version": "0.0.9",
+  "version": "0.1.0",
   "description": "Plugins for `semantic-release` allowing it to be used with a monorepo.",
+  "type": "module",
   "main": "src/index.js",
   "publishConfig": {
     "access": "public"
@@ -10,9 +11,10 @@
     "src"
   ],
   "scripts": {
-    "lint": "eslint --fix .",
-    "format": "prettier --write --single-quote --trailing-comma es5",
-    "format:all": "yarn format \"./**/*.js\"",
+    "lint": "eslint --ignore-path .eslintignore --ext .js,.ts .",
+    "lint:fix": "npm run lint -- --fix",
+    "prettier": "prettier \"**/*.{ts,js,jsx,css,json}\"",
+    "prettier:fix": "prettier \"**/*.{ts,js,jsx,css,json}\" --write",
     "test": "jest"
   },
   "license": "MIT",
@@ -38,10 +40,12 @@
   "devDependencies": {
     "eslint": "^8.35.0",
     "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^8.7.0",
+    "eslint-plugin-prettier": "^4.2.1",
     "husky": "^4.2.1",
     "jest": "^25.1.0",
     "lint-staged": "^10.0.7",
-    "prettier": "^1.19.1",
+    "prettier": "^2.8.4",
     "semantic-release": "^17.0.2",
     "semantic-release-github-pr": "^6.0.0"
   },
@@ -52,7 +56,7 @@
   },
   "lint-staged": {
     "*.js": [
-      "yarn format"
+      "npm run prettier:fix"
     ]
   }
 }
