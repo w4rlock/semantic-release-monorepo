@@ -1,4 +1,4 @@
-const { curry, set, view } = require('ramda');
+import { curry, set, view } from 'ramda';
 
 /**
  * Async version of Ramda's `over` lens utility.

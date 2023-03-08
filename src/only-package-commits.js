@@ -1,11 +1,13 @@
-const { identity, memoizeWith, pipeP } = require('ramda');
-const pkgUp = require('pkg-up');
-const readPkg = require('read-pkg');
-const path = require('path');
-const pLimit = require('p-limit');
-const debug = require('debug')('semantic-release:monorepo');
-const { getCommitFiles, getRoot } = require('./git-utils');
-const { mapCommits } = require('./options-transforms');
+import debug from 'debug';
+import pLimit from 'p-limit';
+import path from 'path';
+import pkgUp from 'pkg-up';
+import { identity, memoizeWith, pipeP } from 'ramda';
+import readPkg from 'read-pkg';
+import { getCommitFiles, getRoot } from './git-utils';
+import { mapCommits } from './options-transforms';
+
+const logDebug = debug('semantic-release:monorepo');
 
 const memoizedGetCommitFiles = memoizeWith(identity, getCommitFiles);
 
@@ -33,7 +35,7 @@ const withFiles = async commits => {
 
 const onlyPackageCommits = async commits => {
   const packagePath = await getPackagePath();
-  debug('Filter commits by package path: "%s"', packagePath);
+  logDebug('Filter commits by package path: "%s"', packagePath);
   const commitsWithFiles = await withFiles(commits);
   // Convert package root path into segments - one for each folder
   const packageSegments = packagePath.split(path.sep);
@@ -50,7 +52,7 @@ const onlyPackageCommits = async commits => {
     });
 
     if (packageFile) {
-      debug(
+      logDebug(
         'Including commit "%s" because it modified package file "%s".',
         subject,
         packageFile

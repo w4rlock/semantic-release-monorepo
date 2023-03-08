@@ -1,14 +1,14 @@
-const readPkg = require('read-pkg');
-const { compose } = require('ramda');
-const withOnlyPackageCommits = require('./only-package-commits');
-const versionToGitTag = require('./version-to-git-tag');
-const logPluginVersion = require('./log-plugin-version');
-const { wrapStep } = require('@w4rlock/semantic-release-plugin-decorators');
+import { wrapStep } from '@w4rlock/semantic-release-plugin-decorators';
+import { compose } from 'ramda';
+import readPkg from 'read-pkg';
+import logPluginVersion from './log-plugin-version';
+import withOnlyPackageCommits from './only-package-commits';
+import versionToGitTag from './version-to-git-tag';
 
-const {
+import {
   mapNextReleaseVersion,
   withOptionsTransforms,
-} = require('./options-transforms');
+} from './options-transforms';
 
 const analyzeCommits = wrapStep(
   'analyzeCommits',

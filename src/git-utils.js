@@ -1,12 +1,12 @@
-const execa = require('execa');
-const { pipeP, split } = require('ramda');
-const fse = require('fs-extra');
-const path = require('path');
-const tempy = require('tempy');
-const fileUrl = require('file-url');
-const gitLogParser = require('git-log-parser');
-const pEachSeries = require('p-each-series');
-const getStream = require('get-stream');
+import execa from 'execa';
+import fileUrl from 'file-url';
+import fse from 'fs-extra';
+import getStream from 'get-stream';
+import gitLogParser from 'git-log-parser';
+import pEachSeries from 'p-each-series';
+import path from 'path';
+import { pipeP, split } from 'ramda';
+import tempy from 'tempy';
 
 const git = async (args, options = {}) => {
   const { stdout } = await execa('git', args, options);

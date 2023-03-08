@@ -1,5 +1,5 @@
-const { compose, composeP, lensProp } = require('ramda');
-const { overA } = require('./lens-utils');
+import { compose, composeP, lensProp } from 'ramda';
+import { overA } from './lens-utils';
 
 const commits = lensProp('commits');
 const nextRelease = lensProp('nextRelease');
