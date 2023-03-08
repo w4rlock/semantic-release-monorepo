@@ -1,7 +1,7 @@
 import { wrapStep } from '@w4rlock/semantic-release-plugin-decorators';
 import { compose } from 'ramda';
 import readPkg from 'read-pkg';
-import logPluginVersion from './log-plugin-version';
+import { logPluginVersion } from './log-plugin-version';
 import withOnlyPackageCommits from './only-package-commits';
 import versionToGitTag from './version-to-git-tag';
 

@@ -13,4 +13,6 @@ const logPluginVersion = type => plugin => async (pluginConfig, config) => {
   return plugin(pluginConfig, config);
 };
 
-module.exports = logPluginVersion;
+module.exports = {
+  logPluginVersion,
+};
