@@ -1,6 +1,6 @@
+const path = require('path');
 const { gitCommitsWithFiles, initGitRepo } = require('./git-utils');
 const { onlyPackageCommits, withFiles } = require('./only-package-commits');
-const path = require('path');
 
 async function getCommitWithFileFromMessage(commits, message) {
   commitsWithFiles = await withFiles(
@@ -8,15 +8,14 @@ async function getCommitWithFileFromMessage(commits, message) {
   );
   if (commitsWithFiles.length !== 0) {
     return commitsWithFiles[0];
-  } else {
-    return null;
   }
+  return null;
 }
 
 describe('filter commits', () => {
   it('should filter 0 commits (no root folder support) ', async () => {
     const gitRepo = await initGitRepo(false);
-    let commitsToCreate = [
+    const commitsToCreate = [
       { message: 'init1', files: [{ name: 'package.json' }] },
       { message: 'message1', files: [{ name: 'readme.md' }] },
       { message: 'message2', files: [{ name: 'module1/readme.md' }] },
@@ -33,7 +32,7 @@ describe('filter commits', () => {
 
   it('should filter 3 commits (folder module1) ', async () => {
     const gitRepo = await initGitRepo(false);
-    let commitsToCreate = [
+    const commitsToCreate = [
       {
         message: 'init1',
         files: [{ name: 'package.json' }, { name: 'module1/package.json' }],
@@ -67,7 +66,7 @@ describe('filter commits', () => {
 
   it('should filter 2 commits (folder module2) ', async () => {
     const gitRepo = await initGitRepo(false);
-    let commitsToCreate = [
+    const commitsToCreate = [
       {
         message: 'init1',
         files: [{ name: 'package.json' }, { name: 'module1/package.json' }],

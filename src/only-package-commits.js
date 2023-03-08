@@ -21,7 +21,7 @@ const getPackagePath = async () => {
   return path.relative(gitRoot, path.resolve(packagePath, '..'));
 };
 
-const withFiles = async commits => {
+export const withFiles = async commits => {
   const limit = pLimit(Number(process.env.SRM_MAX_THREADS) || 500);
   return Promise.all(
     commits.map(commit =>
@@ -33,7 +33,7 @@ const withFiles = async commits => {
   );
 };
 
-const onlyPackageCommits = async commits => {
+export const onlyPackageCommits = async commits => {
   const packagePath = await getPackagePath();
   logDebug('Filter commits by package path: "%s"', packagePath);
   const commitsWithFiles = await withFiles(commits);
@@ -79,7 +79,10 @@ const logFilteredCommitCount = logger => async ({ commits }) => {
   );
 };
 
-const withOnlyPackageCommits = plugin => async (pluginConfig, config) => {
+export const withOnlyPackageCommits = plugin => async (
+  pluginConfig,
+  config
+) => {
   const { logger } = config;
 
   return plugin(
@@ -89,10 +92,4 @@ const withOnlyPackageCommits = plugin => async (pluginConfig, config) => {
       tapA(logFilteredCommitCount(logger))
     )(config)
   );
-};
-
-module.exports = {
-  withOnlyPackageCommits,
-  onlyPackageCommits,
-  withFiles,
 };

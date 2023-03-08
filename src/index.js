@@ -59,5 +59,5 @@ module.exports = {
   generateNotes,
   success,
   fail,
-  tagFormat: readPkg.sync().name + '-v${version}',
+  tagFormat: `${readPkg.sync().name}-v\${version}`,
 };

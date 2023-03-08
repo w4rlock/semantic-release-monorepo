@@ -1,9 +1,8 @@
 {
   "name": "@w4rlock/semantic-release-monorepo",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Plugins for `semantic-release` allowing it to be used with a monorepo.",
   "main": "src/index.js",
-  "type": "module",
   "publishConfig": {
     "access": "public"
   },
@@ -11,6 +10,7 @@
     "src"
   ],
   "scripts": {
+    "lint": "eslint --fix .",
     "format": "prettier --write --single-quote --trailing-comma es5",
     "format:all": "yarn format \"./**/*.js\"",
     "test": "jest"
@@ -20,27 +20,29 @@
     "semantic-release": ">=15.11.x"
   },
   "dependencies": {
-    "@w4rlock/semantic-release-plugin-decorators": "^0.0.1",
+    "@w4rlock/semantic-release-plugin-decorators": "^0.0.3",
     "debug": "^3.1.0",
     "execa": "^0.8.0",
     "file-url": "^3.0.0",
-    "p-limit": "^1.2.0",
-    "pkg-up": "^2.0.0",
-    "ramda": "^0.25.0",
-    "read-pkg": "^5.0.0"
-  },
-  "devDependencies": {
     "fs-extra": "^10.0.1",
     "get-stream": "^6.0.1",
     "git-log-parser": "^1.2.0",
+    "p-each-series": "^2.1.0",
+    "p-limit": "^1.2.0",
+    "pkg-up": "^2.0.0",
+    "ramda": "^0.25.0",
+    "read-pkg": "^5.0.0",
+    "tempy": "1.0.1"
+  },
+  "devDependencies": {
+    "eslint": "^8.35.0",
+    "eslint-config-airbnb-base": "^15.0.0",
     "husky": "^4.2.1",
     "jest": "^25.1.0",
     "lint-staged": "^10.0.7",
-    "p-each-series": "^2.1.0",
     "prettier": "^1.19.1",
     "semantic-release": "^17.0.2",
-    "semantic-release-github-pr": "^6.0.0",
-    "tempy": "1.0.1"
+    "semantic-release-github-pr": "^6.0.0"
   },
   "husky": {
     "hooks": {
