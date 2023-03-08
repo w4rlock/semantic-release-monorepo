@@ -1,6 +1,6 @@
 {
   "name": "@w4rlock/semantic-release-monorepo",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Plugins for `semantic-release` allowing it to be used with a monorepo.",
   "type": "module",
   "main": "src/index.js",
