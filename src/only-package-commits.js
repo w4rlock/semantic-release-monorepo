@@ -4,8 +4,8 @@ import path from 'path';
 import pkgUp from 'pkg-up';
 import { identity, memoizeWith, pipeP } from 'ramda';
 import readPkg from 'read-pkg';
-import { getCommitFiles, getRoot } from './git-utils';
-import { mapCommits } from './options-transforms';
+import { getCommitFiles, getRoot } from './git-utils.js';
+import { mapCommits } from './options-transforms.js';
 
 const logDebug = debug('semantic-release:monorepo');
 

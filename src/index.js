@@ -3,7 +3,7 @@ import { compose } from 'ramda';
 import readPkg from 'read-pkg';
 import { logPluginVersion } from './log-plugin-version.js';
 import { withOnlyPackageCommits } from './only-package-commits.js';
-import versionToGitTag from './version-to-git-tag';
+import versionToGitTag from './version-to-git-tag.js';
 
 import { mapNextReleaseVersion, withOptionsTransforms } from './options-transforms';
 
