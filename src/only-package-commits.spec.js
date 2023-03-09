@@ -12,9 +12,16 @@ async function getCommitWithFileFromMessage(commits, message) {
   return null;
 }
 
-beforeEach(() => {
+const resetBranches = () => {
   exec('git checkout master');
   exec('git branch -D jest-test');
+};
+
+beforeEach(() => {
+  resetBranches();
+});
+afterAll(() => {
+  resetBranches();
 });
 
 describe('filter commits', () => {
