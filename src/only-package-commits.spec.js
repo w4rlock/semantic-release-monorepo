@@ -13,14 +13,11 @@ async function getCommitWithFileFromMessage(commits, message) {
 }
 
 const resetBranches = () => {
-  exec('git checkout master');
-  exec('git branch -D jest-test');
+  exec('git checkout master', { cwd: process.cwd() });
+  exec('git branch -D jest-test', { cwd: process.cwd() });
 };
 
 beforeEach(() => {
-  resetBranches();
-});
-afterAll(() => {
   resetBranches();
 });
 
@@ -95,5 +92,7 @@ describe('filter commits', () => {
     expect(result).toContainEqual(await getCommitWithFileFromMessage(commits, 'message1'));
     expect(result).not.toContainEqual(await getCommitWithFileFromMessage(commits, 'message2'));
     expect(result).toContainEqual(await getCommitWithFileFromMessage(commits, 'message3'));
+
+    resetBranches();
   });
 });
