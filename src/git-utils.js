@@ -99,7 +99,7 @@ export const gitCommitsWithFiles = async (commits) => {
     for (const file of commit.files) {
       const filePath = path.join(process.cwd(), file.name);
       // eslint-disable-next-line
-      await fse.outputFile(filePath, file.body !== 'undefined' ? file.body : commit.message);
+      await fse.outputFile(filePath, file.body !== undefined ? file.body : commit.message);
       await execa('git', ['add', filePath]);
     }
     await execa('git', ['commit', '-m', commit.message, '--allow-empty', '--no-gpg-sign']);

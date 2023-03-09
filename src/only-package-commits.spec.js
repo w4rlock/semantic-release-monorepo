@@ -14,7 +14,7 @@ async function getCommitWithFileFromMessage(commits, message) {
 
 beforeEach(() => {
   exec('git checkout master');
-  exec('git branch -D', 'jest-test');
+  exec('git branch -D jest-test');
 });
 
 describe('filter commits', () => {
