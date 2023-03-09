@@ -1,16 +1,21 @@
 module.exports = {
-  parserOptions: {
-    ecmaVersion: 'latest', // Allows the use of modern ECMAScript features
-    sourceType: 'module' // Allows for the use of imports
-  },
-  plugins: ['prettier'],
-  // Uses the linting rules from @typescript-eslint/eslint-plugin
-  extends: ['eslint:recommended', 'prettier'],
-  rules: {
-    'no-control-regex': 0,
-    'prettier/prettier': 2
-  },
   env: {
-    node: true // Enable Node.js global variables
-  }
+    es2021: true,
+    node: true,
+    jest: true,
+  },
+  parserOptions: {
+    ecmaVersion: 12,
+    sourceType: 'module',
+  },
+  extends: ['eslint:recommended', 'airbnb-base' ],
+  rules: {
+    'import/extensions': [0, 'ignorePackages', { js: 'never', jsx: 'never' }],
+    'max-len': 0,
+    'no-console': 0,
+    'no-await-in-loop': 0,
+    'no-multiple-empty-lines': 0,
+    'space-in-parens': 0,
+    'no-spaced-func': 0,
+  },
 };

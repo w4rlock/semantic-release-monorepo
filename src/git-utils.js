@@ -14,6 +14,59 @@ export const git = async (args, options = {}) => {
 };
 
 /**
+ * Create a shallow clone of a git repository and change the current working directory to the cloned repository root.
+ * The shallow will contain a limited number of commit and no tags.
+ *
+ * @param {String} repositoryUrl The path of the repository to clone.
+ * @param {String} [branch='master'] the branch to clone.
+ * @param {Number} [depth=1] The number of commit to clone.
+ * @return {String} The path of the cloned repository.
+ */
+export const gitShallowClone = (repositoryUrl, branch = 'master', depth = 1) => {
+  const cwd = tempy.directory();
+
+  execa('git', ['clone', '--no-hardlinks', '--no-tags', '-b', branch, '--depth', depth, repositoryUrl, cwd], {
+    cwd
+  });
+  return cwd;
+};
+
+/**
+ * Get the list of parsed commits since a git reference.
+ *
+ * @param {String} [from] Git reference from which to seach commits.
+ * @param {Object} [execaOpts] Options to pass to `execa`.
+ *
+ * @return {Array<Commit>} The list of parsed commits.
+ */
+export const gitGetCommits = async (from) => {
+  Object.assign(gitLogParser.fields, {
+    hash: 'H',
+    message: 'B',
+    gitTags: 'd',
+    committerDate: { key: 'ci', type: Date }
+  });
+  return (
+    await getStream.array(gitLogParser.parse({ _: `${from ? `${from}..` : ''}HEAD` }, { env: { ...process.env } }))
+  ).map((commit) => ({
+    ...commit,
+    message: commit.message.trim(),
+    gitTags: commit.gitTags.trim()
+  }));
+};
+
+/**
+ * Checkout a branch on the current git repository.
+ *
+ * @param {String} branch Branch name.
+ * @param {Boolean} create to create the branch, `false` to checkout an existing branch.
+ * @param {Object} [execaOptions] Options to pass to `execa`.
+ */
+export const gitCheckout = async (branch, create, execaOptions) => {
+  await execa('git', create ? ['checkout', '-b', branch] : ['checkout', branch], execaOptions);
+};
+
+/**
  * // https://stackoverflow.com/questions/424071/how-to-list-all-the-files-in-a-commit
  * @async
  * @param hash Git commit hash.
@@ -40,10 +93,13 @@ export const getRoot = () => git(['rev-parse', '--show-toplevel']);
  * @returns {Array<Commit>} The created commits, in reverse order (to match `git log` order).
  */
 export const gitCommitsWithFiles = async (commits) => {
+  // eslint-disable-next-line
   for (const commit of commits) {
+    // eslint-disable-next-line
     for (const file of commit.files) {
       const filePath = path.join(process.cwd(), file.name);
-      await fse.outputFile(filePath, (file.body = !'undefined' ? file.body : commit.message));
+      // eslint-disable-next-line
+      await fse.outputFile(filePath, file.body !== 'undefined' ? file.body : commit.message);
       await execa('git', ['add', filePath]);
     }
     await execa('git', ['commit', '-m', commit.message, '--allow-empty', '--no-gpg-sign']);
@@ -64,8 +120,8 @@ export const initGit = async (withRemote) => {
   const args = withRemote ? ['--bare', '--initial-branch=master'] : ['--initial-branch=master'];
 
   await execa('git', ['init', ...args], { cwd }).catch(async () => {
-    const args = withRemote ? ['--bare'] : [];
-    return await execa('git', ['init', ...args], { cwd });
+    const flags = withRemote ? ['--bare'] : [];
+    return execa('git', ['init', ...flags], { cwd });
   });
   const repositoryUrl = fileUrl(cwd);
   return { cwd, repositoryUrl };
@@ -88,30 +144,6 @@ export const gitCommits = async (messages, execaOptions) => {
       ).stdout
   );
   return (await gitGetCommits(undefined, execaOptions)).slice(0, messages.length);
-};
-
-/**
- * Get the list of parsed commits since a git reference.
- *
- * @param {String} [from] Git reference from which to seach commits.
- * @param {Object} [execaOpts] Options to pass to `execa`.
- *
- * @return {Array<Commit>} The list of parsed commits.
- */
-export const gitGetCommits = async (from) => {
-  Object.assign(gitLogParser.fields, {
-    hash: 'H',
-    message: 'B',
-    gitTags: 'd',
-    committerDate: { key: 'ci', type: Date }
-  });
-  return (
-    await getStream.array(gitLogParser.parse({ _: `${from ? `${from}..` : ''}HEAD` }, { env: { ...process.env } }))
-  ).map((commit) => {
-    commit.message = commit.message.trim();
-    commit.gitTags = commit.gitTags.trim();
-    return commit;
-  });
 };
 
 /**
@@ -144,44 +176,16 @@ export const initBareRepo = async (repositoryUrl, branch = 'master') => {
  * @return {String} The path of the clone if `withRemote` is `true`, the path of the repository otherwise.
  */
 export const initGitRepo = async (withRemote, branch = 'master') => {
-  let { cwd, repositoryUrl } = await initGit(withRemote);
+  const { cwd, repositoryUrl } = await initGit(withRemote);
+  let dir = cwd;
   if (withRemote) {
     await initBareRepo(repositoryUrl, branch);
-    cwd = gitShallowClone(repositoryUrl, branch);
+    dir = gitShallowClone(repositoryUrl, branch);
   } else {
-    await gitCheckout(branch, true, { cwd });
+    await gitCheckout(branch, true, { dir });
   }
 
-  await execa('git', ['config', 'commit.gpgsign', false], { cwd });
+  await execa('git', ['config', 'commit.gpgsign', false], { dir });
 
   return { cwd, repositoryUrl };
-};
-
-/**
- * Create a shallow clone of a git repository and change the current working directory to the cloned repository root.
- * The shallow will contain a limited number of commit and no tags.
- *
- * @param {String} repositoryUrl The path of the repository to clone.
- * @param {String} [branch='master'] the branch to clone.
- * @param {Number} [depth=1] The number of commit to clone.
- * @return {String} The path of the cloned repository.
- */
-export const gitShallowClone = (repositoryUrl, branch = 'master', depth = 1) => {
-  const cwd = tempy.directory();
-
-  execa('git', ['clone', '--no-hardlinks', '--no-tags', '-b', branch, '--depth', depth, repositoryUrl, cwd], {
-    cwd
-  });
-  return cwd;
-};
-
-/**
- * Checkout a branch on the current git repository.
- *
- * @param {String} branch Branch name.
- * @param {Boolean} create to create the branch, `false` to checkout an existing branch.
- * @param {Object} [execaOptions] Options to pass to `execa`.
- */
-export const gitCheckout = async (branch, create, execaOptions) => {
-  await execa('git', create ? ['checkout', '-b', branch] : ['checkout', branch], execaOptions);
 };
