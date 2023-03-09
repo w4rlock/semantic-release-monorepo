@@ -13,11 +13,16 @@ async function getCommitWithFileFromMessage(commits, message) {
 }
 
 const resetBranches = () => {
-  exec('git checkout master', { cwd: process.cwd() });
-  exec('git branch -D jest-test', { cwd: process.cwd() });
+  const cwd = path.resolve(path.join(path.dirname(module.filename), '..'));
+  console.log(exec('git checkout master', { cwd }).stderr);
+  console.log(exec('git branch -D jest-test', { cwd }).stderr);
 };
 
 beforeEach(() => {
+  resetBranches();
+});
+
+afterAll(() => {
   resetBranches();
 });
 
