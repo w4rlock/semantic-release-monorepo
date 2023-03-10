@@ -6,8 +6,8 @@ const logDebug = debug('semantic-release:monorepo');
 
 export default (type) => (plugin) => async (pluginConfig, config) => {
   if (config.options.debug) {
-    const dirname = dirname(module.filename);
-    const { version } = await readPkg(resolve(dirname, '../'));
+    const currdir = dirname(module.filename);
+    const { version } = await readPkg(resolve(currdir, '../'));
     logDebug('Running %o version %o', type, version);
   }
 
