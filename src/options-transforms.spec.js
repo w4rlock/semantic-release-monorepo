@@ -1,4 +1,5 @@
-const { mapNextReleaseVersion, mapCommits } = require('./options-transforms');
+// eslint-disable-next-line
+import { mapCommits, mapNextReleaseVersion } from './options-transforms.js';
 
 const OPTIONS = {
   commits: [1, 2, 3, 4],

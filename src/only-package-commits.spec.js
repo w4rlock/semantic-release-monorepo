@@ -1,8 +1,9 @@
-import { exec } from 'shelljs';
-
+/* eslint-disable */
 import path from 'path';
-import { gitCommitsWithFiles, initGitRepo } from './git-utils';
-import { onlyPackageCommits, withFiles } from './only-package-commits';
+import { exec } from 'shelljs';
+import { gitCommitsWithFiles, initGitRepo } from './git-utils.js';
+import { onlyPackageCommits, withFiles } from './only-package-commits.js';
+/* eslint-enable */
 
 async function getCommitWithFileFromMessage(commits, message) {
   const commitsWithFiles = await withFiles(Array.of(commits.find((obj) => obj.subject === message)));

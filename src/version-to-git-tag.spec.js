@@ -1,3 +1,4 @@
+// eslint-disable-next-line
 import versionToGitTag from './version-to-git-tag';
 
 describe('#versionToGitTag', () => {
