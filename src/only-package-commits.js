@@ -74,10 +74,6 @@ const logFilteredCommitCount =
 export const withOnlyPackageCommits = (plugin) => async (pluginConfig, config) => {
   const { logger } = config;
 
-  console.log('----------------------------');
-  console.log(pluginConfig);
-  console.log('----------------------------');
-
   return plugin(
     pluginConfig,
     await pipeP(mapCommits(onlyPackageCommits), tapA(logFilteredCommitCount(logger)))(config)
